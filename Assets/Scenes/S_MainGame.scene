@@ -1,0 +1,71 @@
+Scene: S_MainGame
+Entities:
+  - Entity: 21474836480
+    Tag:
+      tag: Nail
+    Transform:
+      translate: [0, 1.29999995, 0]
+      rotation: [0, 0, 0]
+      scale: [0.0500000007, 0.100000001, 0.0500000007]
+    Mesh:
+      name: Nail.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: Nail.lua
+  - Entity: 17179869184
+    Tag:
+      tag: Scene Manager
+    Script:
+      name: SpawnObjects.lua
+  - Entity: 12884901888
+    Tag:
+      tag: Stage
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 1.57079637]
+      scale: [1, 1, 1]
+    Mesh:
+      name: plane.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 1
+      albedo: [1, 1, 1]
+    Texture2D:
+      name: floot.tga
+  - Entity: 8589934592
+    Tag:
+      tag: Main Camera
+    Camera3D:
+      eye position: [0, 4, -0.00999999978]
+      focus position: [0, 0, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.54702783
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: true
+  - Entity: 4294967296
+    Tag:
+      tag: Runtime Camera
+    Script:
+      name: FPSCamera.lua
+    Camera3D:
+      eye position: [0, 3, -0.100000001]
+      focus position: [0, 1.60000002, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.54702783
+      nearZ: 1
+      farZ: 100
+      is runtime camera: true
+      is scene camera: false
