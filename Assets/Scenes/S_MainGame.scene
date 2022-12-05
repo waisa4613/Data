@@ -1,6 +1,40 @@
 Scene: S_MainGame
 Entities:
-  - Entity: 21474836480
+  - Entity: 34359738368
+    Tag:
+      tag: ViewBox
+    Transform:
+      translate: [-0.5, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: GoView.lua
+  - Entity: 30064771074
+    Tag:
+      tag: EndBox
+    Transform:
+      translate: [0.5, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 25769803776
     Tag:
       tag: Nail
     Transform:
@@ -9,7 +43,7 @@ Entities:
       scale: [0.0500000007, 0.100000001, 0.0500000007]
     Mesh:
       name: Nail.obj
-      draw: true
+      draw: false
     Material:
       roughness: 0.600000024
       metallicness: 0
@@ -18,12 +52,12 @@ Entities:
       albedo: [1, 1, 1]
     Script:
       name: Nail.lua
-  - Entity: 17179869184
+  - Entity: 21474836480
     Tag:
       tag: Scene Manager
     Script:
       name: SpawnObjects.lua
-  - Entity: 12884901888
+  - Entity: 17179869184
     Tag:
       tag: Stage
     Transform:
@@ -41,7 +75,7 @@ Entities:
       albedo: [1, 1, 1]
     Texture2D:
       name: floot.tga
-  - Entity: 8589934592
+  - Entity: 12884901888
     Tag:
       tag: Main Camera
     Camera3D:
@@ -49,12 +83,12 @@ Entities:
       focus position: [0, 0, 0]
       up vector: [0, 1, 0]
       field of view: 45
-      aspect ratio: 1.54702783
+      aspect ratio: 1.77777779
       nearZ: 1
       farZ: 100
       is runtime camera: false
       is scene camera: true
-  - Entity: 4294967296
+  - Entity: 8589934592
     Tag:
       tag: Runtime Camera
     Script:
@@ -64,8 +98,26 @@ Entities:
       focus position: [0, 1.60000002, 0]
       up vector: [0, 1, 0]
       field of view: 45
-      aspect ratio: 1.54702783
+      aspect ratio: 1.77777779
       nearZ: 1
       farZ: 100
       is runtime camera: true
       is scene camera: false
+  - Entity: 4294967296
+    Tag:
+      tag: StartCnt
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [3.14159274, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: StartCnt.lua
