@@ -21,6 +21,7 @@ local spawnTimer        = 0
 local spawnAngle        = 30
 local shinyChance       = 800
 local meshName = { "bed.obj", "dai.obj", "sofa_double.obj", "table.obj" }
+local meshTexture = {"N_bed.tga", "N_desk,tga","N_sofa.tga","N_table.tga"}
 
 local openingEntities   = {}
 local openingBoxTimers  = {}
@@ -64,7 +65,14 @@ function InvalidEntity(e)
   ghostMesh.toDraw = false
 
   local boxMesh = GetComponent(e, "Mesh")
-  boxMesh:Load(meshName[math.random(1, 4)])
+  local randomMeshID = math.random(1,4)
+  LogMessage(meshTexture[randomMeshID])
+
+  boxMesh:Load(meshName[randomMeshID])
+  RemoveComponent(e, "Texture2D")
+
+  AddComponent(e,"Texture2D",meshTexture[randomMeshID])
+
 
   local boxTransform = GetComponent(e, "Transform")
   boxTransform.scale.x = 0.06
@@ -78,7 +86,6 @@ function InvalidEntity(e)
   vec.y = boxRigidBody.translate.y
   vec.z = boxRigidBody.translate.z
 
-  RemoveComponent(e, "Texture2D")
   
   RemoveComponent(e, "RigidBody")
 
@@ -90,10 +97,10 @@ function InvalidEntity(e)
   r:SetPosition(vec.x, 0, vec.z)
   r:UpdateGeometry()
 
-  local boxMaterial = GetComponent(e, "Material")
-  boxMaterial.albedo.x = RandomFloat(0, 1)
-  boxMaterial.albedo.y = RandomFloat(0, 1)
-  boxMaterial.albedo.z = RandomFloat(0, 1)
+  -- local boxMaterial = GetComponent(e, "Material")
+  -- boxMaterial.albedo.x = RandomFloat(0, 1)
+  -- boxMaterial.albedo.y = RandomFloat(0, 1)
+  -- boxMaterial.albedo.z = RandomFloat(0, 1)
   end
 end
 
@@ -203,9 +210,11 @@ function SpawnGhost()
 end
 
 function SpawnSet()
+  if AdHoc.Global.Start>=2 then
   SpawnBox()
   SpawnGhost()
   nextID = nextID + 1
+  end
 end
 
 function UpdateSets()
@@ -279,6 +288,7 @@ function Update()
     end
   else
     changeToFpsModeAvailable = true
+    
   end
   UpdateSets()
 end

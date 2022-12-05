@@ -15,7 +15,7 @@ local countTime  = 0
 local shaketime  = 0
 local counter    = true
 local once       = false
-
+AdHoc.Global.Camera =0
 shake = 0
 
 function Move()
@@ -32,10 +32,10 @@ function Move()
 
     local d = 0
 
-    if input:GetKey(AdHoc.Key.q) == true then
+    if input:GetKey(AdHoc.Key.q) == true or input:GetButton(AdHoc.Controller.lshoulder,0) then
         d = d + 1
     end
-    if input:GetKey(AdHoc.Key.e) == true then
+    if input:GetKey(AdHoc.Key.e) == true or input:GetButton(AdHoc.Controller.rshoulder,0) then
         d = d - 1
     end
 
@@ -64,19 +64,22 @@ function Move()
     local put = false
 
     -- キーの入力処理
-    if input:GetKey(AdHoc.Key.d) == true then
+    if input:GetKey(AdHoc.Key.d) == true or input:GetButton(AdHoc.Controller.dpad_right,0)==true 
+    then
         put = true
         x = x + 1 * DeltaTime()
     end
-    if input:GetKey(AdHoc.Key.a) == true then
+    if input:GetKey(AdHoc.Key.a) == true or input:GetButton(AdHoc.Controller.dpad_left,0)==true 
+    then
         put = true
         x = x - 1 * DeltaTime()
     end
-    if input:GetKey(AdHoc.Key.w) == true then
+    if input:GetKey(AdHoc.Key.w) == true or input:GetButton(AdHoc.Controller.dpad_up,0)==true 
+    then
         put = true
         z = z + 1 * DeltaTime()
     end
-    if input:GetKey(AdHoc.Key.s) == true then
+    if input:GetKey(AdHoc.Key.s) == true or input:GetButton(AdHoc.Controller.dpad_down,0)==true then
         put = true
         z = z - 1 * DeltaTime()
     end
@@ -110,8 +113,11 @@ function Update()
     if e ~= nil then
         local s = GetComponent(e, "Script")
         if s:Get("changeToFpsModeAvailable") == true then
+            if AdHoc.Global.Camera >=1 then
+
             Move()
-            if input:GetKeyUp(AdHoc.Key.enter) then
+            end
+            if input:GetKeyUp(AdHoc.Key.enter) or input:GetButton(AdHoc.Controller.a , 0) then
                 LoadScene(nextScene)
             end
         else
