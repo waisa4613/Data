@@ -51,25 +51,34 @@ end
 function RayHit()
     local transform = GetComponent(this, "Transform")
     local e = Raycast(transform.translate, downVector, 10)
+    local Press = false
+
+    if input:GetKeyDown(AdHoc.Key.space) or input:GetButton(AdHoc.Controller.b , 0) then
+        Press = true
+        local t = FindEntity("NailFall")
+        if t ~= nil then
+            local ns =GetComponent(t,"Script")
+            ns:Call("NailSpawn",transform)
+        end
+        if VibStop==true  then
+            input:SetControllerVibration(20 ,20 ,0)
+            VibStop=false
+            --LogMessage("VibOn")
+        end
+        local camera = FindEntity("Runtime Camera")
+        if camera ~= nil then
+            local cameraScript = GetComponent(camera, "Script")
+            cameraScript:Set("shake", 1)
+        end
+    end
 
     if e ~= 0 then
         local m = GetComponent(this, "Material")
         m.albedo.x = 7
         m.albedo.y = 1
         m.albedo.z = 1
-        if input:GetKeyDown(AdHoc.Key.space) or input:GetButton(AdHoc.Controller.b , 0) then
-            if VibStop==true  then
-            input:SetControllerVibration(20 ,20 ,0)
-            VibStop=false
-            --LogMessage("VibOn")
-         end
-        --vibe=false
-
-            local camera = FindEntity("Runtime Camera")
-            if camera ~= nil then
-                local cameraScript = GetComponent(camera, "Script")
-                cameraScript:Set("shake", 1)
-            end
+        if Press == true then
+           
             local manager = FindEntity("Scene Manager")
             local s = GetComponent(manager, "Script")
             s:Call("OpenBox", e)
@@ -80,7 +89,8 @@ function RayHit()
         m.albedo.y = 1
         m.albedo.z = 1
     end
-    
+
+  
 end
 
 function RayHitRotation()

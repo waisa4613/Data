@@ -113,10 +113,10 @@ function Update()
     if e ~= nil then
         local s = GetComponent(e, "Script")
         if s:Get("changeToFpsModeAvailable") == true then
-            if AdHoc.Global.Camera >=1 then
+            --if AdHoc.Global.Camera >=1 then
 
             Move()
-            end
+            --end
             if input:GetKeyUp(AdHoc.Key.enter) or input:GetButton(AdHoc.Controller.a , 0) then
                 LoadScene(nextScene)
             end

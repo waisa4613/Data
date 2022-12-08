@@ -1,109 +1,22 @@
 Scene: S_MainGame
 Entities:
-  - Entity: 34359738368
+  - Entity: 38654705664
     Tag:
-      tag: ViewBox
-    Transform:
-      translate: [-0.5, 0, 0]
-      rotation: [0, 0, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    Mesh:
-      name: cube.obj
-      draw: false
-    Material:
-      roughness: 0.600000024
-      metallicness: 0
-      transparency: 1
-      hasTexture: 0
-      albedo: [1, 1, 1]
-    Script:
-      name: GoView.lua
-  - Entity: 30064771074
-    Tag:
-      tag: EndBox
-    Transform:
-      translate: [0.5, 0, 0]
-      rotation: [0, 0, 0]
-      scale: [0.100000001, 0.100000001, 0.100000001]
-    Mesh:
-      name: cube.obj
-      draw: false
-    Material:
-      roughness: 0.600000024
-      metallicness: 0
-      transparency: 1
-      hasTexture: 0
-      albedo: [1, 1, 1]
-  - Entity: 25769803776
-    Tag:
-      tag: Nail
-    Transform:
-      translate: [0, 1.29999995, 0]
-      rotation: [0, 0, 0]
-      scale: [0.0500000007, 0.100000001, 0.0500000007]
-    Mesh:
-      name: Nail.obj
-      draw: false
-    Material:
-      roughness: 0.600000024
-      metallicness: 0
-      transparency: 1
-      hasTexture: 0
-      albedo: [1, 1, 1]
-    Script:
-      name: Nail.lua
-  - Entity: 21474836480
-    Tag:
-      tag: Scene Manager
-    Script:
-      name: SpawnObjects.lua
-  - Entity: 17179869184
-    Tag:
-      tag: Stage
+      tag: NailFall
     Transform:
       translate: [0, 0, 0]
-      rotation: [0, 0, 1.57079637]
+      rotation: [0, 0, 0]
       scale: [1, 1, 1]
     Mesh:
-      name: plane.obj
+      name: cube.obj
       draw: true
     Material:
       roughness: 0.600000024
       metallicness: 0
       transparency: 1
-      hasTexture: 1
+      hasTexture: 0
       albedo: [1, 1, 1]
-    Texture2D:
-      name: floot.tga
-  - Entity: 12884901888
-    Tag:
-      tag: Main Camera
-    Camera3D:
-      eye position: [0, 4, -0.00999999978]
-      focus position: [0, 0, 0]
-      up vector: [0, 1, 0]
-      field of view: 45
-      aspect ratio: 1.77777779
-      nearZ: 1
-      farZ: 100
-      is runtime camera: false
-      is scene camera: true
-  - Entity: 8589934592
-    Tag:
-      tag: Runtime Camera
-    Script:
-      name: FPSCamera.lua
-    Camera3D:
-      eye position: [0, 3, -0.100000001]
-      focus position: [0, 1.60000002, 0]
-      up vector: [0, 1, 0]
-      field of view: 45
-      aspect ratio: 1.77777779
-      nearZ: 1
-      farZ: 100
-      is runtime camera: true
-      is scene camera: false
-  - Entity: 4294967296
+  - Entity: 34359738368
     Tag:
       tag: StartCnt
     Transform:
@@ -121,3 +34,106 @@ Entities:
       albedo: [1, 1, 1]
     Script:
       name: StartCnt.lua
+  - Entity: 30064771072
+    Tag:
+      tag: Runtime Camera
+    Script:
+      name: FPSCamera.lua
+    Camera3D:
+      eye position: [0, 3, -0.100000001]
+      focus position: [0, 1.60000002, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77777779
+      nearZ: 1
+      farZ: 100
+      is runtime camera: true
+      is scene camera: false
+  - Entity: 25769803776
+    Tag:
+      tag: Main Camera
+    Camera3D:
+      eye position: [0, 4, -0.00999999978]
+      focus position: [0, 0, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77777779
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: true
+  - Entity: 21474836480
+    Tag:
+      tag: Stage
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 1.57079637]
+      scale: [1, 1, 1]
+    Mesh:
+      name: plane.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 1
+      albedo: [1, 1, 1]
+    Texture2D:
+      name: floot.tga
+  - Entity: 17179869184
+    Tag:
+      tag: Scene Manager
+    Script:
+      name: SpawnObjects.lua
+  - Entity: 12884901888
+    Tag:
+      tag: Nail
+    Transform:
+      translate: [0, 1.29999995, 0]
+      rotation: [0, 0, 0]
+      scale: [0.0500000007, 0.100000001, 0.0500000007]
+    Mesh:
+      name: Nail.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: Nail.lua
+  - Entity: 8589934592
+    Tag:
+      tag: EndBox
+    Transform:
+      translate: [0.5, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 4294967296
+    Tag:
+      tag: ViewBox
+    Transform:
+      translate: [-0.5, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [0.100000001, 0.100000001, 0.100000001]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: GoView.lua
