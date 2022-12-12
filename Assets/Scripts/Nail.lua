@@ -12,7 +12,7 @@ local VibStop = true
 local VibTime = 0
 local vibe =true
 local moveLimit = 0.9
-local rayDistance = 0.45
+local rayDistance = 0.7
 local m = GetComponent(this,"Mesh")
 AdHoc.Global.Start=0
 rayPos = { Vector3D:new(), Vector3D:new(), Vector3D:new(),Vector3D:new()}
@@ -56,34 +56,24 @@ function RayHit()
    
     local transform = GetComponent(this, "Transform")
     local e = Raycast(transform, downVector, rayDistance)
-    local cnt = 1
-    for i = -1, 1, 2 do
-        for p = -1, 1, 2 do
-            rayPos[cnt].x=transform.translate.x+0.05*i
-            rayPos[cnt].y=transform.translate.y
-            rayPos[cnt].z=transform.translate.z+0.05*p
-            cnt = cnt + 1
-            -- en =CreateEntity()
-            -- local m = GetComponent(en, "Mesh")
-            -- m:Load("giftBox.obj")
-            -- local t  = GetComponent(en, "Transform")
-            -- t.translate.x =transform.translate.x+0.1*i
-            -- t.translate.y =transform.translate.y
-            -- t.translate.z =transform.translate.z+0.1*p
-            -- t.scale.x = 0.01
-            -- t.scale.y = 0.01
-            -- t.scale.z = 0.01
-        end
-    end
-    local et = {Raycast(rayPos[1], downVector,rayDistance),Raycast(rayPos[2], downVector, rayDistance),Raycast(rayPos[3], downVector, rayDistance),Raycast(rayPos[4], downVector, rayDistance)}
+    -- local cnt = 1
+    -- for i = -1, 1, 2 do
+    --     for p = -1, 1, 2 do
+    --         rayPos[cnt].x=transform.translate.x+0.05*i
+    --         rayPos[cnt].y=transform.translate.y
+    --         rayPos[cnt].z=transform.translate.z+0.05*p
+    --         cnt = cnt + 1
+    --     end
+    -- end
+    -- local et = {Raycast(rayPos[1], downVector,rayDistance),Raycast(rayPos[2], downVector, rayDistance),Raycast(rayPos[3], downVector, rayDistance),Raycast(rayPos[4], downVector, rayDistance)}
 
     local Press = false
 
-    if input:GetKeyDown(AdHoc.Key.space) or input:GetButton(AdHoc.Controller.b , 0) then
-        if et[2] ~= 0 then
-        local a =  GetComponent(et[2], "Transform")
-        LogMessage(a.translate.x)
-        end
+    if input:GetKeyDown(AdHoc.Key.space) or input:GetButtonDown(AdHoc.Controller.b , 0) then
+        -- if et[2] ~= 0 then
+        -- local a =  GetComponent(et[2], "Transform")
+        -- LogMessage(a.translate.x)
+        -- end
         Press = true
         local t = FindEntity("NailFall")
         if t ~= nil then
@@ -121,7 +111,6 @@ function RayHit()
     -- end
 
     if e ~= 0 then
-
         local m = GetComponent(this, "Material")
         m.albedo.x = 7
         m.albedo.y = 1
