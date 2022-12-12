@@ -17,6 +17,10 @@ local counter    = true
 local once       = false
 AdHoc.Global.Camera =0
 shake = 0
+shakeStrength = 50
+
+SerializeField("shakeStrength", shakeStrength)
+
 
 function Move()
     local camera    = GetComponent(this, "Camera3D")
@@ -123,8 +127,8 @@ function Update()
         else
             local camera    = GetComponent(this, "Camera3D")
             if shake == 1 then
-                camera.eyePosition.x = 0 + math.sin(shaketime) / 10
-                camera.eyePosition.y = 3 + math.sin(shaketime) / 10
+                camera.eyePosition.x = 0 + math.sin(shaketime) / shakeStrength
+                camera.eyePosition.y = 3 + math.sin(shaketime) / shakeStrength
                 camera.eyePosition.z = -0.10
             else
                 camera.eyePosition.x = 0

@@ -22,10 +22,10 @@ local spawnTimer        = 0
 local spawnAngle        = 30
 local shinyChance       = 800
 local bigMeshName       = {"N_bed.obj","N_sofa.obj"}
-local mediumMeshName    = {"N_table.obj","N_chair.obj","N_chest.obj"}
+local mediumMeshName    = {"dai.obj"}--,"N_chair.obj","N_chest.obj"
 local smallMeshName     = {"N_tv.obj"}
 local bigMeshTex        = {"N_bed.tga","N_sofa.tga"}
-local mediumMeshTex     = {"N_table.tga","N_chair.tga","N_chest.tga"}
+local mediumMeshTex     = {"N_table.tga"}--,"N_chair.tga","N_chest.tga"
 local smallMeshTex      = {"N_tv.tga"}
 
 local openingEntities   = {}
