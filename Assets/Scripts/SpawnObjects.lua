@@ -14,14 +14,19 @@ local distances         = { 0.15, 0.2, 0.25 }
 local startingPositions = { "Up", "Down", "Left", "Right" }
 local speed             = 0.3
 local sin               = 0
+local sinScale          = 150
 local ghostScale        = 0.3
 local ghostDistances    = {}
 local fadeInSpeed       = 0.2
 local spawnTimer        = 0
 local spawnAngle        = 30
 local shinyChance       = 800
-local meshName = { "bed.obj", "dai.obj", "sofa_double.obj", "table.obj" }
-local meshTexture = {"N_bed.tga", "N_desk,tga","N_sofa.tga","N_table.tga"}
+local bigMeshName       = {"N_bed.obj","N_sofa.obj"}
+local mediumMeshName    = {"dai.obj"}--,"N_chair.obj","N_chest.obj"
+local smallMeshName     = {"N_tv.obj"}
+local bigMeshTex        = {"N_bed.tga","N_sofa.tga"}
+local mediumMeshTex     = {"N_table.tga"}--,"N_chair.tga","N_chest.tga"
+local smallMeshTex      = {"N_tv.tga"}
 
 local openingEntities   = {}
 local openingBoxTimers  = {}
@@ -51,7 +56,12 @@ function OpenBox(e)
   openingBoxTimers[e]                = 50
 
   local r = GetComponent(e, "RigidBody")
+  local t = GetComponent(e,"Transform")
+  t.translate.x =  t.translate.x
+  t.translate.y = 0.2
+  t.translate.z =  t.translate.z
   r:SetVelocity(0, 0, 0)
+  r:SetPosition(t.translate.x, t.translate.y, t.translate.z)
 end
 
 function InvalidEntity(e)
@@ -65,15 +75,30 @@ function InvalidEntity(e)
   ghostMesh.toDraw = false
 
   local boxMesh = GetComponent(e, "Mesh")
-  local randomMeshID = math.random(1,4)
-  LogMessage(meshTexture[randomMeshID])
+  local randomMeshID = 0
+  local selectMesh 
+  local selectMeshTex 
+  
+  if boxScales[entityToIndex[e]] == scaleSizes[1] then
+    randomMeshID = math.random(1, #smallMeshName)
+    selectMesh = smallMeshName[randomMeshID]
+    selectMeshTex = smallMeshTex[randomMeshID]
 
-  boxMesh:Load(meshName[randomMeshID])
+  elseif boxScales[entityToIndex[e]] == scaleSizes[2] then
+    randomMeshID = math.random(1, #mediumMeshName)
+    selectMesh = mediumMeshName[randomMeshID]
+    selectMeshTex = mediumMeshTex[randomMeshID]
+
+  elseif boxScales[entityToIndex[e]] == scaleSizes[3] then
+    randomMeshID = math.random(1, #bigMeshName)
+    selectMesh = bigMeshName[randomMeshID]
+    selectMeshTex = bigMeshTex[randomMeshID]
+  end
+
+  boxMesh:Load(selectMesh)
   RemoveComponent(e, "Texture2D")
-
-  AddComponent(e,"Texture2D",meshTexture[randomMeshID])
-
-
+  AddComponent(e,"Texture2D",selectMeshTex)
+  
   local boxTransform = GetComponent(e, "Transform")
   boxTransform.scale.x = 0.06
   boxTransform.scale.y = 0.06
@@ -97,10 +122,12 @@ function InvalidEntity(e)
   r:SetPosition(vec.x, 0, vec.z)
   r:UpdateGeometry()
 
-  -- local boxMaterial = GetComponent(e, "Material")
-  -- boxMaterial.albedo.x = RandomFloat(0, 1)
-  -- boxMaterial.albedo.y = RandomFloat(0, 1)
-  -- boxMaterial.albedo.z = RandomFloat(0, 1)
+  local boxMaterial = GetComponent(e, "Material")
+  boxMaterial.albedo.x = 1
+  boxMaterial.albedo.y = 1
+  boxMaterial.albedo.z = 1
+
+  --ScoreAdd
   end
 end
 
@@ -217,7 +244,7 @@ function SpawnSet()
   end
 end
 
-function UpdateSets()
+function UpdateSets(fadeIn)
   for i = 0, nextID - 1 do
     -- Update box
     local e = boxEntities[i]
@@ -227,7 +254,7 @@ function UpdateSets()
       local t = GetComponent(e, "Transform")
       local r = GetComponent(e, "RigidBody")
 
-      local y = t.translate.y + (math.sin(sin) / 100)
+      local y = t.translate.y + (math.sin(sin) / sinScale)
       r:SetTranslation(t.translate.x, y, t.translate.z)
 
       local isShiny = math.random(0, shinyChance)
@@ -243,10 +270,19 @@ function UpdateSets()
       ghostTransform.translate.z = t.translate.z - ghostDistances[i] * boxForward.z
 
       -- Fade in
-      if t.scale.x <= boxScales[i] then
-        t.scale.x = t.scale.x + fadeInSpeed * DeltaTime()
-        t.scale.y = t.scale.y + fadeInSpeed * DeltaTime()
-        t.scale.z = t.scale.z + fadeInSpeed * DeltaTime()
+      if fadeIn then
+        if t.scale.x <= boxScales[i] then
+          t.scale.x = t.scale.x + fadeInSpeed * DeltaTime()
+          t.scale.y = t.scale.y + fadeInSpeed * DeltaTime()
+          t.scale.z = t.scale.z + fadeInSpeed * DeltaTime()
+        end
+      else
+        if t.scale.x > 0 then
+          t.scale.x = t.scale.x - (fadeInSpeed / 2) * DeltaTime()
+          t.scale.y = t.scale.y - (fadeInSpeed / 2) * DeltaTime()
+          t.scale.z = t.scale.z - (fadeInSpeed / 2) * DeltaTime()
+        end
+      end
 
         r.scale.x = t.scale.x
         r.scale.y = t.scale.y
@@ -256,7 +292,7 @@ function UpdateSets()
         ghostTransform.scale.x = t.scale.x * ghostScale
         ghostTransform.scale.y = t.scale.y * ghostScale
         ghostTransform.scale.z = t.scale.z * ghostScale
-      end
+     
 
       -- Shiny box
       if boxIsShiny[i] == true then
@@ -280,6 +316,7 @@ function UpdateSets()
 end
 
 function Update()
+  local fadeIn = true
   if not StopSpawn() then
     spawnTimer = spawnTimer + 10 * DeltaTime()
     if(spawnTimer > 10) then
@@ -288,9 +325,9 @@ function Update()
     end
   else
     changeToFpsModeAvailable = true
-    
+    fadeIn = false
   end
-  UpdateSets()
+  UpdateSets(fadeIn)
 end
 
 function OpeningBoxes()

@@ -1,6 +1,83 @@
 Scene: Untitled
 Entities:
+  - Entity: 25769803776
+    Tag:
+      tag: New Entity(6)
+    Transform:
+      translate: [0.962669015, 0.237903088, 0.0363311693]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: N_tv.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 21474836480
+    Tag:
+      tag: New Entity(5)
+    Transform:
+      translate: [5.50806379, 0.801603019, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: SU_futon.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 17179869184
+    Tag:
+      tag: New Entity(4)
+    Transform:
+      translate: [1.12, 0, 2.61363482]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: N_sofa.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
   - Entity: 12884901888
+    Tag:
+      tag: New Entity(3)
+    Transform:
+      translate: [-4.5995779, 0.606264591, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: N_bed.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 8589934592
+    Tag:
+      tag: Main Camera
+    Camera3D:
+      eye position: [0, 11.1000004, -9.30000019]
+      focus position: [0, 0, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77777779
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: true
+  - Entity: 4294967296
     Tag:
       tag: Runtime Camera
     Camera3D:
@@ -13,34 +90,3 @@ Entities:
       farZ: 100
       is runtime camera: true
       is scene camera: false
-  - Entity: 8589934592
-    Tag:
-      tag: Main Camera
-    Camera3D:
-      eye position: [0, 0, -8]
-      focus position: [0, 0, 0]
-      up vector: [0, 1, 0]
-      field of view: 45
-      aspect ratio: 1.77777779
-      nearZ: 1
-      farZ: 100
-      is runtime camera: false
-      is scene camera: true
-  - Entity: 4294967296
-    Tag:
-      tag: New Entity(3)
-    Transform:
-      translate: [0, 0, 0]
-      rotation: [0, 0, 0]
-      scale: [1, 1, 1]
-    Mesh:
-      name: cube.obj
-      draw: true
-    Material:
-      roughness: 0.600000024
-      metallicness: 0
-      transparency: 1
-      hasTexture: 0
-      albedo: [1, 1, 1]
-    Script:
-      name: Default.lua
