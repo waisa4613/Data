@@ -70,10 +70,7 @@ function RayHit()
     local Press = false
 
     if input:GetKeyDown(AdHoc.Key.space) or input:GetButtonDown(AdHoc.Controller.b , 0) then
-        -- if et[2] ~= 0 then
-        -- local a =  GetComponent(et[2], "Transform")
-        -- LogMessage(a.translate.x)
-        -- end
+       
         Press = true
         local t = FindEntity("NailFall")
         if t ~= nil then
@@ -85,11 +82,7 @@ function RayHit()
             VibStop=false
             --LogMessage("VibOn")
         end
-        local camera = FindEntity("Runtime Camera")
-        if camera ~= nil then
-            local cameraScript = GetComponent(camera, "Script")
-            cameraScript:Set("shake", 1)
-        end
+       
     end
 
     -- for i = 1, 4 do
@@ -116,7 +109,16 @@ function RayHit()
         m.albedo.y = 1
         m.albedo.z = 1
         if Press == true then
-           
+            local ScoreManager = FindEntity("ScoreManager")
+            if ScoreManager ~= nil then
+                local sm =GetComponent(ScoreManager,"Script")
+                sm:Call("AddScore",6,1)
+            end
+            local camera = FindEntity("Runtime Camera")
+            if camera ~= nil then
+                local cameraScript = GetComponent(camera, "Script")
+                cameraScript:Set("shake", 1)
+            end
             local manager = FindEntity("Scene Manager")
             local s = GetComponent(manager, "Script")
             s:Call("OpenBox", e)
