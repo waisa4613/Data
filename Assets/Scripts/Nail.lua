@@ -55,25 +55,22 @@ end
 function RayHit()
    
     local transform = GetComponent(this, "Transform")
-    local e = Raycast(transform, downVector, rayDistance)
-    -- local cnt = 1
-    -- for i = -1, 1, 2 do
-    --     for p = -1, 1, 2 do
-    --         rayPos[cnt].x=transform.translate.x+0.05*i
-    --         rayPos[cnt].y=transform.translate.y
-    --         rayPos[cnt].z=transform.translate.z+0.05*p
-    --         cnt = cnt + 1
-    --     end
-    -- end
-    -- local et = {Raycast(rayPos[1], downVector,rayDistance),Raycast(rayPos[2], downVector, rayDistance),Raycast(rayPos[3], downVector, rayDistance),Raycast(rayPos[4], downVector, rayDistance)}
+    
+    local cnt = 1
+    for i = -1, 1, 2 do
+        for p = -1, 1, 2 do
+            rayPos[cnt].x=transform.translate.x+0.07*i
+            rayPos[cnt].y=transform.translate.y
+            rayPos[cnt].z=transform.translate.z+0.07*p
+            cnt = cnt + 1
+        end
+    end
+    local et = {Raycast(transform, downVector, rayDistance),Raycast(rayPos[1], downVector,rayDistance),Raycast(rayPos[2], downVector, rayDistance),Raycast(rayPos[3], downVector, rayDistance),Raycast(rayPos[4], downVector, rayDistance)}
 
     local Press = false
 
     if input:GetKeyDown(AdHoc.Key.space) or input:GetButtonDown(AdHoc.Controller.b , 0) then
-        -- if et[2] ~= 0 then
-        -- local a =  GetComponent(et[2], "Transform")
-        -- LogMessage(a.translate.x)
-        -- end
+       
         Press = true
         local t = FindEntity("NailFall")
         if t ~= nil then
@@ -85,38 +82,45 @@ function RayHit()
             VibStop=false
             --LogMessage("VibOn")
         end
-        local camera = FindEntity("Runtime Camera")
-        if camera ~= nil then
-            local cameraScript = GetComponent(camera, "Script")
-            cameraScript:Set("shake", 1)
+       
+    end
+
+    local rayFlag = false
+    local e = 0
+    for i = 1, 5 do
+        if et[i]~=0 then
+            rayFlag=true
+            if e == 0 then
+                e=et[i]
+            elseif e ~= et[i] then
+                local t1 =  GetComponent(e, "Transform")
+                local t2 =  GetComponent(et[i], "Transform")
+                local distance1 = math.sqrt((transform.translate.x-t1.translate.x)*(transform.translate.x-t1.translate.x)+(transform.translate.z-t1.translate.z)*(transform.translate.z-t1.translate.z))
+                local distance2 = math.sqrt((transform.translate.x-t2.translate.x)*(transform.translate.x-t2.translate.x)+(transform.translate.z-t2.translate.z)*(transform.translate.z-t2.translate.z))
+
+                if distance1 > distance2 then
+                    e = et[i]
+                end
+            end
         end
     end
 
-    -- for i = 1, 4 do
-    --     if e ~= et[i] and et[i] ~= 0 then
-    --         if e == 0 then
-    --             e = et[i]
-    --         else
-    --             local t1 =  GetComponent(e, "Transform")
-    --             local t2 =  GetComponent(et[i], "Transform")
-    --             local distance1 = math.sqrt((transform.translate.x-t1.translate.x)*(transform.translate.x-t1.translate.x)+(transform.translate.z-t1.translate.z)*(transform.translate.z-t1.translate.z))
-    --             local distance2 = math.sqrt((transform.translate.x-t2.translate.x)*(transform.translate.x-t2.translate.x)+(transform.translate.z-t2.translate.z)*(transform.translate.z-t2.translate.z))
-
-    --             if distance1 > distance2 then
-    --                 e = et[i]
-    --             end
-    --         end
-             
-    --     end
-    -- end
-
-    if e ~= 0 then
+    if rayFlag == true then
         local m = GetComponent(this, "Material")
         m.albedo.x = 7
         m.albedo.y = 1
         m.albedo.z = 1
         if Press == true then
-           
+            local ScoreManager = FindEntity("ScoreManager")
+            if ScoreManager ~= nil then
+                local sm =GetComponent(ScoreManager,"Script")
+                sm:Call("AddScore",6,1)
+            end
+            local camera = FindEntity("Runtime Camera")
+            if camera ~= nil then
+                local cameraScript = GetComponent(camera, "Script")
+                cameraScript:Set("shake", 1)
+            end
             local manager = FindEntity("Scene Manager")
             local s = GetComponent(manager, "Script")
             s:Call("OpenBox", e)
