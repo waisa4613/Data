@@ -22,7 +22,7 @@ local spawnTimer        = 0
 local spawnAngle        = 30
 local shinyChance       = 800
 local bigMeshName       = {"N_bed.obj","N_sofa.obj"}
-local mediumMeshName    = {"dai.obj"}--,"N_chair.obj","N_chest.obj"
+local mediumMeshName    = {"N_table.obj"}--,"N_chair.obj","N_chest.obj"
 local smallMeshName     = {"N_tv.obj"}
 local bigMeshTex        = {"N_bed.tga","N_sofa.tga"}
 local mediumMeshTex     = {"N_table.tga"}--,"N_chair.tga","N_chest.tga"
@@ -34,7 +34,7 @@ local openingBoxesCount = 0
 
 -- global
 maxModelCount            = 100
-maxObjects               = 6
+maxObjects               = 12
 maxObjectsCount          = 0
 changeToFpsModeAvailable = false
 
@@ -100,9 +100,9 @@ function InvalidEntity(e)
   AddComponent(e,"Texture2D",selectMeshTex)
   
   local boxTransform = GetComponent(e, "Transform")
-  boxTransform.scale.x = 0.06
-  boxTransform.scale.y = 0.06
-  boxTransform.scale.z = 0.06
+  boxTransform.scale.x = 0.2
+  boxTransform.scale.y = 0.2
+  boxTransform.scale.z = 0.2
 
   local boxRigidBody = GetComponent(e, "RigidBody")
   
