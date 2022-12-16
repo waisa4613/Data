@@ -1,0 +1,98 @@
+Scene: testScene_openingHouse
+Entities:
+  - Entity: 25769803776
+    Tag:
+      tag: ground
+    Transform:
+      translate: [0, -1, 0]
+      rotation: [0, 0, 0]
+      scale: [100, 0.100000001, 100]
+    Mesh:
+      name: cube.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [0.918918908, 0.0283835866, 0.0283835866]
+  - Entity: 21474836480
+    Tag:
+      tag: floor
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [20, 1, 20]
+    Mesh:
+      name: cube.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 17179869184
+    Tag:
+      tag: master
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: testScr_manageOpeningHouse.lua
+  - Entity: 12884901888
+    Tag:
+      tag: Main Camera
+    Camera3D:
+      eye position: [0, 70.0999985, -71.9000015]
+      focus position: [0, 46.4000015, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77864587
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: true
+  - Entity: 8589934592
+    Tag:
+      tag: Runtime Camera
+    Script:
+      name: testScr_focusHouse.lua
+    Camera3D:
+      eye position: [0, 9.80000019, -75.6999969]
+      focus position: [0, 9.5, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77864587
+      nearZ: 1
+      farZ: 100
+      is runtime camera: true
+      is scene camera: false
+  - Entity: 4294967296
+    Tag:
+      tag: manager_openingHouse
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Mesh:
+      name: cube.obj
+      draw: false
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: OpeningHouse.lua
