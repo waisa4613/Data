@@ -9,7 +9,7 @@ local this = GetThis()
 if AdHoc.Global.Ar_objects == nil then
     AdHoc.Global.Ar_objects = {}
 end
-AdHoc.Global.Ar_objects.setupManager = this
+AdHoc.Global.Ar_objects.openingManager = this
 
 -- フラグ
 local isCreated = false
@@ -20,14 +20,21 @@ if AdHoc.Global.Fs_SetUp == nil then
     AdHoc.Global.Fs_SetUp = {}      -- 配列にまとめて関数をデリゲーションする
 end
 
+-- オブジェクトの名前を共用できるようにする
+if AdHoc.Global.Ar_texts == nil then
+    AdHoc.Global.Ar_texts = {}
+end
+AdHoc.Global.Ar_texts.nameFloor = "Stage"   -- 床の名前
+AdHoc.Global.Ar_texts.nameOpeningHouse = GetComponent(this,"Tag"):Get()
+
 ------ 普通の壁関係 ------
 -- 壁のエンティティ
 local walls = {}
 
 -- 壁のtransformに関する情報
-local hWall = 7    -- 壁の高さ
+local hWall = 0.8    -- 壁の高さ
 local wWall = 0    -- 壁の幅（floorの大きさに合わせる）
-local zWall = 1.0   -- 壁の太さ
+local zWall = 0.1   -- 壁の太さ
 
 -- 壁回転実行関数の配列
 if AdHoc.Global.WallFs == nil then
@@ -37,6 +44,10 @@ end
 -- 家が落下してから家が展開するまでの時間
 local timeTillOpenFromLanding = 1
 local timePastFromLanding = 0
+
+-- 床の変数 
+local yFloorFirst = 10 -- 床の最初の位置
+local yFloorEnd = 0     -- 落下した後の位置
 
 -- ドアマネージャーを作成
 local doorManager = CreateEntity()
@@ -97,13 +108,17 @@ local scrRotate = [[
 
         ------ transformいじりの情報獲得 ------
         -- 床の情報取得
-        local transFloor = GetComponent(FindEntity("floor"),"Transform")
+        local transFloor = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform")
 
         -- 回転の中心を求める
         disSinCos = trans.scale.y
 
         posCenter.x = trans.translate.x                 -- translateの値をコピー
-        posCenter.y = trans.translate.y - trans.translate.y - transFloor.scale.y
+        if AdHoc.Global.Ar_texts.nameFloor == "Stage" then
+            posCenter.y = 0         
+        else
+            posCenter.y = -1 * transFloor.scale.y
+        end
         posCenter.z = trans.translate.z
 
         -- -- デバッグ用
@@ -166,7 +181,7 @@ local scrRotate = [[
         if ifRotateIsDone == true then
             timePastForDestroy = timePastForDestroy + DeltaTime()
 
-            if timePastForDestroy >= GetComponent(FindEntity("manager_openingHouse"),"Script"):Call("GetTimeTillWallBeingDestroyed") then
+            if timePastForDestroy >= GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameOpeningHouse),"Script"):Call("GetTimeTillWallBeingDestroyed") then
                 DestroyEntity(this)
             end
         end
@@ -238,7 +253,7 @@ local scrRotate02 = [[
 
         ------ transformいじりの情報獲得 ------
         -- floorの情報取得
-        local transFloor = GetComponent(FindEntity("floor"),"Transform")
+        local transFloor = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform")
 
         -- 回転の中心を求める
         disSinCos = trans.scale.y                       -- 回転の半径
@@ -297,7 +312,7 @@ local scrRotate02 = [[
         if ifRotateIsDone == true then
             timePastForDestroy = timePastForDestroy + DeltaTime()
 
-            if timePastForDestroy >= GetComponent(FindEntity("manager_openingHouse"),"Script"):Call("GetTimeTillWallBeingDestroyed") then
+            if timePastForDestroy >= GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameOpeningHouse),"Script"):Call("GetTimeTillWallBeingDestroyed") then
                 DestroyEntity(this)
             end
         end
@@ -311,14 +326,16 @@ local scrRotate02 = [[
         return ifRotateIsDone
     end
 
-    function ChangeRotateCenter(hikisuuY)
+    function ChangeRotateCenter(hikisuuY,YFloor)
         trans = GetComponent(this,"Transform")
-        local transFloor = GetComponent(FindEntity("floor"),"Transform")
+        local transFloor = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform")
 
         disSinCos = hikisuuY
 
         posCenter.x = trans.translate.x                 -- translateの値をコピー
-        posCenter.y = transFloor.translate.y - transFloor.scale.y
+
+        posCenter.y = transFloor.translate.y - YFloor
+        
         posCenter.z = trans.translate.z
 
         local angleTemp = -1 * trans.rotation.y + math.rad(90)
@@ -328,10 +345,14 @@ local scrRotate02 = [[
 
     function ReCulculate()
         trans = GetComponent(this,"Transform")
-        local transFloor = GetComponent(FindEntity("floor"),"Transform")
+        local transFloor = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform")
         
         posCenter.x = trans.translate.x                 -- translateの値をコピー
-        posCenter.y = transFloor.translate.y - transFloor.scale.y
+        if AdHoc.Global.Ar_texts.nameFloor == "Stage" then
+            posCenter.y = transFloor.translate.y
+        else
+            posCenter.y = transFloor.translate.y - transFloor.scale.y
+        end
         posCenter.z = trans.translate.z
 
         local angleTemp = -1 * trans.rotation.y + math.rad(90)
@@ -383,44 +404,69 @@ local scrCreateDoor = [[
 
     -- 扉の大きさに関する情報
     local scaDoor = Vector3D:new()
-    scaDoor.x = 5   -- 扉の幅、壁の幅より大きくならないようチェックを入れる
-    scaDoor.y = 5   -- 扉の高さ、壁の高さより大きくならないようチェックを入れる
+
+    local scaleLeastForBelow = 0.05
+
+    -- ステージの大きさを基に計算
+    scaDoor.x = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform").scale.x * 0.3   
+    scaDoor.y = scaDoor.x * 1.5   -- 扉の幅を基に決める
 
     local marginDoor = Vector3D:new()   -- 壁に残しておくべき余白
-    marginDoor.x = 0.5
-    marginDoor.y = 1
+    marginDoor.x = GetComponent(FindEntity(AdHoc.Global.Ar_texts.nameFloor),"Transform").scale.x * 0
+    marginDoor.y = 0.1  -- hWallを基に後で計算する
 
     -- 生成に必要な情報
     AdHoc.Global.EntranceFs = {}
         
     function CreateDoorWall(hWall, wWall, zWall)
-        -- ドアの大きさチェック
+        -- 床の情報を取得
+        local floor = FindEntity(AdHoc.Global.Ar_texts.nameFloor)
+        local transFloor = GetComponent(floor,"Transform")
+
+        -- 壁の位置などに必要な情報を取得        
+        local posFloor = Vector3D:new()     -- 床の位置取得
+        posFloor.x = transFloor.translate.x
+        posFloor.y = transFloor.translate.y
+        posFloor.z = transFloor.translate.z
+        
+        local scaFloor = Vector3D:new()           -- 床の大きさ取得
+        scaFloor.x = transFloor.scale.x     
+        if AdHoc.Global.Ar_texts.nameFloor == "Stage" then  -- ステージの高さに合わせて処理を変える
+            scaFloor.y = 0            
+        else
+            scaFloor.y = transFloor.scale.y
+        end
+        scaFloor.z = transFloor.scale.z
+
+        -- ドアの最低限の大きさ
+        marginDoor.y = hWall * marginDoor.y
+        LogMessage("Y : "..tostring(marginDoor.y))
+        ------ ドアの大きさチェック -------
+
+        -- 幅
         if scaDoor.x > wWall - marginDoor.x * 2 then
             scaDoor.x = wWall - marginDoor.x * 2
         end
         if scaDoor.x < 0 then
             scaDoor.x = 0
         end
-        if scaDoor.y > hWall - marginDoor.y * 2 then
-            scaDoor.y = hWall - marginDoor.y * 2
-        end
-        if scaDoor.y < 0 then
-            scaDoor.y = 0
-        end
 
-        -- 壁の位置などに必要な情報を取得
-        local floor = FindEntity("floor")
-        local transFloor = GetComponent(floor,"Transform")
-        
-        local posFloor = Vector3D:new()
-        posFloor.x = transFloor.translate.x
-        posFloor.y = transFloor.translate.y
-        posFloor.z = transFloor.translate.z
+        -- 高さ
+        local isUpYLessThanMargin = false
 
-        local scaFloor = Vector3D:new()
-        scaFloor.x = transFloor.scale.x
-        scaFloor.y = transFloor.scale.y
-        scaFloor.z = transFloor.scale.z
+        if scaFloor.y < scaleLeastForBelow then -- 下の壁の大きさが最低より小さいとき
+            if hWall - scaleLeastForBelow - scaDoor.y > marginDoor.y then    -- 多分ここの計算がおかしい
+                isUpYLessThanMargin = true
+
+                scaDoor.y = hWall - marginDoor.y - scaleLeastForBelow
+            end
+            LogMessage("Less Than Least")
+        else
+            if scaDoor.y < 0 then
+                scaDoor.y = 0
+            end
+            LogMessage("More Than Least")
+        end
 
         for i = 1, #namesWall ,1 do
             walls[namesWall[i] ] = CreateEntity()
@@ -436,20 +482,39 @@ local scrCreateDoor = [[
 
             if namesWall[i] == "Entrance_Below" then
                 scaTemp.x = scaDoor.x
-                scaTemp.y = scaFloor.y
                 scaTemp.z = zWall
 
+                if scaFloor.y < scaleLeastForBelow then
+                    scaTemp.y = scaleLeastForBelow          -- ちょっとステップのある玄関みたいにする
+                else
+                    scaTemp.y = scaFloor.y
+                end
+
                 posTemp.x = posFloor.x
-                posTemp.y = posFloor.y
+                posTemp.y = posFloor.y + scaTemp.y
             end
             if namesWall[i] == "Entrance_Up" then
+                local transBelow = GetComponent(walls["Entrance_Below"],"Transform")
+
                 scaTemp.x = scaDoor.x
-                scaTemp.y = hWall - (scaDoor.y + scaFloor.y)
+
+                if isUpYLessThanMargin == true then
+                    scaTemp.y = marginDoor.y
+                else
+                    scaTemp.y = hWall - (scaDoor.y + scaFloor.y + transBelow.scale.y * 2)
+                end        
+                
                 scaTemp.z = zWall
 
                 posTemp.x = posFloor.x
-                posTemp.y = posFloor.y - scaFloor.y + scaDoor.y * 2 + 
-                GetComponent(walls["Entrance_Below"],"Transform").scale.y * 2 + scaTemp.y
+
+                if isUpYLessThanMargin == true then                 -- 床の高さが基準を満たしていないとき
+                    posTemp.y = transBelow.translate.y + transBelow.scale.y + scaDoor.y * 2 + scaTemp.y
+                    LogMessage("This way")
+                else                                                -- 満たしているとき
+                    posTemp.y = posFloor.y - scaFloor.y + scaDoor.y + 
+                    GetComponent(walls["Entrance_Below"],"Transform").scale.y * 2 + scaTemp.y                
+                end
 
             end
             if namesWall[i] == "SideWall_Left" then
@@ -467,6 +532,10 @@ local scrCreateDoor = [[
 
                 posTemp.x = posFloor.x + scaDoor.x + scaTemp.x
                 posTemp.y = posFloor.y - scaFloor.y + scaTemp.y
+            end
+
+            if AdHoc.Global.Ar_texts.nameFloor == "Stage" then
+                posTemp.y = posTemp.y + scaFloor.y
             end
 
             -- スクリプトのアタッチ
@@ -487,7 +556,8 @@ local scrCreateDoor = [[
             local disTemp = GetComponent(walls["Entrance_Up"],"Transform").scale.y + 
             scaDoor.y * 2 + GetComponent(walls["Entrance_Below"],"Transform").scale.y * 2
 
-            AdHoc.Global.EntranceFs[2].ChangeRotateCenter(disTemp)
+            -- 上の壁のみ回転の中心を変化させる
+            AdHoc.Global.EntranceFs[2].ChangeRotateCenter(disTemp,0)
             tempDebug = true
         end
 
@@ -541,8 +611,8 @@ colorRoof.y = 0
 colorRoof.z = 1
 
 local scaRoof = Vector3D:new()  -- 屋根の大きさ
-scaRoof.x = 30                  -- 部屋の大きさより小さくならないよう、チェックを入れる
-scaRoof.y = 20
+scaRoof.x = 2                  -- 部屋の大きさより小さくならないよう、チェックを入れる
+scaRoof.y = 0.8
 
 local disFromRoom = 50          -- 部屋からどれだけ上に生成するか
 
@@ -618,11 +688,9 @@ local scrRoofFall = [[
 local isRoofCreated = false
 
 local function CreateRoof() -- 屋根を作る関数
-
     if isRoofCreated == true then
         return
     end
-
     isRoofCreated = true
 
     roof = CreateEntity()
@@ -649,13 +717,19 @@ local function CreateRoof() -- 屋根を作る関数
     trans.scale.y = scaRoof.x
 
     --　位置設定
-    local floor = FindEntity("floor")
+    local floor = FindEntity(AdHoc.Global.Ar_texts.nameFloor)
     local transFloor = GetComponent(floor,"Transform")
 
     trans.translate.x = transFloor.translate.x
     trans.translate.z = transFloor.translate.z
 
-    local yStop = transFloor.translate.y - transFloor.scale.y + hWall * 2
+    local yStop
+
+    if AdHoc.Global.Ar_texts.nameFloor == "Stage" then
+        yStop = transFloor.translate.y + hWall * 2
+    else
+        yStop = transFloor.translate.y - transFloor.scale.y + hWall * 2
+    end
     trans.translate.y = yStop
 
     -- スクリプトをアタッチ
@@ -682,7 +756,7 @@ function CreateWalls()
     end
 
     -- 壁の位置などに必要な情報を取得
-    local floor = FindEntity("floor")
+    local floor = FindEntity(AdHoc.Global.Ar_texts.nameFloor)
     local transFloor = GetComponent(floor,"Transform")
     
     local posFloor = Vector3D:new()
@@ -713,7 +787,11 @@ function CreateWalls()
                 trans.scale.x = wWall + zWall * 2
             end
     
-            trans.translate.y = posFloor.y - scaFloor.y + hWall
+            if AdHoc.Global.Ar_texts.nameFloor == "Stage" then  -- plane.objを使っていると位置がずれる
+                trans.translate.y = posFloor.y + hWall
+            else
+                trans.translate.y = posFloor.y - scaFloor.y + hWall
+            end
     
             -- 名前を変える（デバッグしやすくするため）
             local tag = GetComponent(walls[i],"Tag")
@@ -797,6 +875,7 @@ local function BlowAwayRoof()
     if timePastBlown >= timeTillBlownisDone then
         isBlowAwayDone = true
         DestroyEntity(roof)
+        roof = nil
     end
 end
 
@@ -813,12 +892,8 @@ local didHouseFallStart = false
 local isHouseFallDone = false
 
 -- 微調整変数
--- 床の情報取得 --
-local yFloorFirst = 70 -- 床の最初の位置
-local yFloorEnd = 0     -- 落下した後の位置
-
-local timeTillHouseFall = 0.5
-local speedHouseFall = yFloorFirst / timeTillHouseFall
+local timeTillHouseFall = 2        -- 家が落下するまでの時間
+local speedHouseFall = (yFloorFirst - yFloorEnd) / timeTillHouseFall
 
 function StartHouseFall()
     didHouseFallStart = true
@@ -832,7 +907,7 @@ local function HouseFall()
     local temp_disMove = speedHouseFall * DeltaTime()   -- このフレームでの移動量を求める
 
     -- 床を移動
-    local floor = FindEntity("floor")
+    local floor = FindEntity(AdHoc.Global.Ar_texts.nameFloor)
     local temp_y = GetComponent(floor,"Transform").translate.y
 
     if temp_y - temp_disMove <= yFloorEnd then          -- 着地チェック処理
@@ -879,7 +954,14 @@ end
 local isOpeningDone = false
 
 function Start()
-    local floor = FindEntity("floor")
+    local floor = FindEntity(AdHoc.Global.Ar_texts.nameFloor)
+
+    if floor == nil then
+        LogMessage("Not Found")
+    else
+        LogMessage("OK!! Found")
+    end
+
     GetComponent(floor,"Transform").translate.y = yFloorFirst
 end
 

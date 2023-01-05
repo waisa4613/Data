@@ -12,7 +12,7 @@ local VibStop = true
 local VibTime = 0
 local vibe =true
 local moveLimit = 0.9
-local rayDistance = 0.7
+local rayDistance = 1
 local m = GetComponent(this,"Mesh")
 AdHoc.Global.Start=0
 rayPos = { Vector3D:new(), Vector3D:new(), Vector3D:new(),Vector3D:new()}
@@ -123,7 +123,16 @@ function RayHit()
             end
             local manager = FindEntity("Scene Manager")
             local s = GetComponent(manager, "Script")
-            s:Call("OpenBox", e)
+            local flg=s:Call("CheckBox", e)
+             if flg then
+                LogMessage("openbox")
+                s:Call("OpenBox", e)
+             else
+                LogMessage("enemyhit")
+                manager = FindEntity("EnemyManager")
+                s = GetComponent(manager, "Script")
+                s:Call("HitEnemy", e)
+             end
         end
     else
         local m = GetComponent(this, "Material")

@@ -1,12 +1,28 @@
 Scene: Title
 Entities:
-  - Entity: 12884901888
+  - Entity: 30064771072
     Tag:
-      tag: New Entity(3)
+      tag: Background
     Transform:
-      translate: [0, 0, 0]
-      rotation: [0, 0, 0]
-      scale: [1, 1, 1]
+      translate: [0, 1, 0]
+      rotation: [0, 1.57079637, 0]
+      scale: [1, 5, 6]
+    Mesh:
+      name: plane.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+  - Entity: 25769803776
+    Tag:
+      tag: ExitButton
+    Transform:
+      translate: [2.5, -1.5, 0]
+      rotation: [0, 0, -0.00872664712]
+      scale: [1, 0.600000024, 0.400000006]
     Mesh:
       name: cube.obj
       draw: true
@@ -14,23 +30,81 @@ Entities:
       roughness: 0.600000024
       metallicness: 0
       transparency: 1
+      hasTexture: 0
+      albedo: [0, 0, 1]
+    Script:
+      name: exit_button.lua
+    RigidBody:
+      mass: 1
+      restitution: 1
+      static friction: 0.5
+      dynamic friction: 0.5
+      is trigger: false
+      is kinematic: true
+      scale is same as model: true
+      collider type: 0
+      collider shape: 0
+      body type: 1
+      entity: 25769803776
+      scale: [1, 1, 1]
+      radius: 1
+      half height: 0.5
+  - Entity: 21474836480
+    Tag:
+      tag: StartButton
+    Transform:
+      translate: [-2.5, -1.5, 0]
+      rotation: [-0, 0, 0]
+      scale: [1, 0.600000024, 0.400000006]
+    Mesh:
+      name: cube.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
       albedo: [1, 0, 0]
     Script:
-      name: start.lua
-  - Entity: 8589934592
+      name: start_button.lua
+    RigidBody:
+      mass: 1
+      restitution: 1
+      static friction: 0.5
+      dynamic friction: 0.5
+      is trigger: false
+      is kinematic: true
+      scale is same as model: true
+      collider type: 0
+      collider shape: 0
+      body type: 1
+      entity: 21474836480
+      scale: [0.600000024, 0.600000024, 1]
+      radius: 1
+      half height: 0.5
+  - Entity: 17179869184
+    Tag:
+      tag: Title Scene Manager
+    Transform:
+      translate: [0.0563739538, 0, 0]
+      rotation: [0, 0, 0]
+      scale: [1, 1, 1]
+    Script:
+      name: title_scene_manager.lua
+  - Entity: 12884901888
     Tag:
       tag: Main Camera
     Camera3D:
       eye position: [0, 0, -8]
       focus position: [0, 0, 0]
-      up vector: [0, 1, 0]
+      up vector: [0, 3, 0]
       field of view: 45
-      aspect ratio: 1.5
+      aspect ratio: 1.77777779
       nearZ: 1
       farZ: 100
       is runtime camera: false
       is scene camera: true
-  - Entity: 4294967296
+  - Entity: 8589934592
     Tag:
       tag: Runtime Camera
     Camera3D:
@@ -38,8 +112,26 @@ Entities:
       focus position: [0, 0, 0]
       up vector: [0, 1, 0]
       field of view: 45
-      aspect ratio: 1.5
+      aspect ratio: 1.77777779
       nearZ: 1
       farZ: 100
       is runtime camera: true
       is scene camera: false
+  - Entity: 4294967296
+    Tag:
+      tag: Nail
+    Transform:
+      translate: [2.53538609, -0.779814601, -0.280000001]
+      rotation: [-1.57079637, 0, 0]
+      scale: [0.400000006, 0.400000006, 0.400000006]
+    Mesh:
+      name: Nail.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [0, 0.152201951, 0.6795367]
+    Script:
+      name: title_nail.lua
