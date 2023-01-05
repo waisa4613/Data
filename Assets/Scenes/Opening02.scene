@@ -1,0 +1,99 @@
+Scene: Opening02
+Entities:
+  - Entity: 38654705664
+    Tag:
+      tag: Info_house
+    Script:
+      name: Info_house.lua
+  - Entity: 34359738368
+    Tag:
+      tag: manager_setupHouse
+    Script:
+      name: SetUpManager02.lua
+  - Entity: 30064771072
+    Tag:
+      tag: cameraStaging
+    Script:
+      name: camera_focusHouse.lua
+    Camera3D:
+      eye position: [0, 1.89999998, -6.80000019]
+      focus position: [0, 1.79999995, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77864587
+      nearZ: 1
+      farZ: 100
+      is runtime camera: true
+      is scene camera: false
+  - Entity: 25769803776
+    Tag:
+      tag: ControlOpeningHouse
+    Script:
+      name: controlOpeningHouse.lua
+  - Entity: 21474836480
+    Tag:
+      tag: Runtime Camera
+    Camera3D:
+      eye position: [0, 3, -0.100000001]
+      focus position: [0, 1.60000002, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77864587
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: false
+  - Entity: 17179869184
+    Tag:
+      tag: Main Camera
+    Camera3D:
+      eye position: [0, 5.19999981, -0.699999988]
+      focus position: [0, 0, 0]
+      up vector: [0, 1, 0]
+      field of view: 45
+      aspect ratio: 1.77864587
+      nearZ: 1
+      farZ: 100
+      is runtime camera: false
+      is scene camera: true
+  - Entity: 12884901888
+    Tag:
+      tag: Stage
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 1.57079637]
+      scale: [1, 1, 1]
+    Mesh:
+      name: plane.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 1
+      albedo: [1, 1, 1]
+    Texture2D:
+      name: floot.tga
+  - Entity: 8589934592
+    Tag:
+      tag: manager_openingHouse
+    Script:
+      name: OpeningHouse.lua
+  - Entity: 4294967296
+    Tag:
+      tag: Stage_back
+    Transform:
+      translate: [0, 0, 0]
+      rotation: [0, 0, 4.71238899]
+      scale: [1, 1, 1]
+    Mesh:
+      name: plane.obj
+      draw: true
+    Material:
+      roughness: 0.600000024
+      metallicness: 0
+      transparency: 1
+      hasTexture: 0
+      albedo: [1, 1, 1]
+    Script:
+      name: Stage_back.lua

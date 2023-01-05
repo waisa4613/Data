@@ -34,7 +34,7 @@ local openingBoxesCount = 0
 
 -- global
 maxModelCount            = 100
-maxObjects               = 12
+maxObjects               = 2
 maxObjectsCount          = 0
 changeToFpsModeAvailable = false
 
@@ -48,6 +48,15 @@ function StopSpawn()
   else
     return false
   end
+end
+
+function CheckBox(e)
+  local flg=false
+  if boxEntities[entityToIndex[e]]~=nil then
+    flg=true
+  end
+
+  return flg
 end
 
 function OpenBox(e)
@@ -178,12 +187,12 @@ function SpawnBox()
     end
 
     -- Set translation
-    t.translate.y = 0.5
+    t.translate.y = 0.6
 
     -- Set scale
     local randomScale      = math.random(1, 3)
     boxScales[nextID]      = scaleSizes[randomScale]
-    ghostDistances[nextID] = distances[randomScale];
+    ghostDistances[nextID] = distances[randomScale]
     t.scale.x = 0
     t.scale.y = 0
     t.scale.z = 0
